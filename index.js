@@ -1,10 +1,27 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
+const cors = require("cors");
 
 const app = express();
+
+// Configurar CORS
+app.use(
+  cors({
+    origin: "*", // Permitir todas las solicitudes, puedes especificar un dominio en lugar de "*"
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
+
 const server = http.createServer(app);
-const io = new Server(server);
+// const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "*", // Permitir solicitudes desde cualquier origen
+    methods: ["GET", "POST"], // Métodos permitidos
+  },
+});
 
 app.get("/", (req, res) => {
   res.send("Socket.IO Server is running");
